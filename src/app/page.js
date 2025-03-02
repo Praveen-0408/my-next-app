@@ -6,7 +6,7 @@ import './globals.css'; // Import global styles
 export default function Home() {
   return (
     <header className="navbar">
-      <h1 className="logo">RoxkTrading</h1>
+      <h1 className="logo">Rexo Trading</h1>
       <nav>
         <ul className="nav-links">
           <li><Link href="/about">About</Link></li>
