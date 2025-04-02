@@ -1,0 +1,274 @@
+/* styles/components.module.css */
+
+/* Instead of bare table selectors, scope them to a specific class */
+.tableContainer table {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: auto;
+}
+
+.tableContainer thead {
+  background-color: #333;
+  color: white;
+  text-align: left;
+  font-size: 18px;
+}
+
+.tableContainer th,
+.tableContainer td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tableContainer tbody tr {
+  background-color: #fff;
+  transition: 0.3s;
+  cursor: default;
+}
+
+.tableContainer tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tableContainer table {
+    width: 100%;
+  }
+
+  .tableContainer th,
+  .tableContainer td {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* Rest of your existing styles remain the same */
+.menuBtn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: default;
+  color: black;
+  z-index: 1000;
+}
+
+.menuDropdown {
+  position: fixed;
+  top: 0;
+  left: -200px;
+  width: 200px;
+  height: 100vh;
+  background: #333;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0 5px 5px 0;
+  box-shadow: 2px 0px 8px rgba(0, 0, 0, 0.2);
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+/* ... rest of your existing styles ... */
+
+
+
+
+/* styles/components.module.css */
+
+/* Menu Button (Hamburger Icon) */
+.menuBtn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: default;
+  color: black;
+  z-index: 1000;
+}
+
+/* Menu Panel (Initially Hidden to the Left) */
+.menuDropdown {
+  position: fixed;
+  top: 0;
+  left: -200px;
+  width: 200px;
+  height: 100vh;
+  background: #333;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0 5px 5px 0;
+  box-shadow: 2px 0px 8px rgba(0, 0, 0, 0.2);
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+/* When the menu is active */
+.menuDropdown.active {
+  left: 0;
+}
+
+/* Sidebar Menu Button Styling */
+.menuDropdown .menuBtn {
+  font-size: 20px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.menuDropdown .menuBtn:hover {
+  color: #ddd;
+}
+
+/* Dropdown Links */
+.menuDropdown a {
+  padding: 12px;
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  display: block;
+  transition: 0.3s;
+}
+
+.menuDropdown a:hover {
+  background: #575757;
+}
+
+/* Search Bar */
+.searchContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  position: relative;
+  z-index: 900;
+}
+
+.searchInput {
+  width: 300px;
+  padding: 10px 40px 10px 35px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 16px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #333;
+  cursor: pointer;
+}
+
+/* Sidebar Buttons */
+.sidebar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.sidebarBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+  padding: 12px 18px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+  width: 120px;
+}
+
+.sidebarBtn i {
+  font-size: 24px;
+}
+
+.sidebarBtn:hover {
+  background: #575757;
+}
+
+/* Table Styling */
+.table {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: auto;
+}
+
+/* Table Header */
+.table thead {
+  background-color: #333;
+  color: white;
+  text-align: left;
+  font-size: 18px;
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Table Rows */
+.table tbody tr {
+  background-color: #fff;
+  transition: 0.3s;
+  cursor: default;
+}
+
+/* Hover Effect */
+.table tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .table {
+    width: 100%;
+  }
+
+  .table th,
+  .table td {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* Overlay */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-color: rgba(255, 182, 193, 0.4);
+  pointer-events: auto;
+}
+
+/* Additional styling for main content */
+.main {
+  padding: 20px;
+}
+
+.main h1 {
+  text-align: center;
+}

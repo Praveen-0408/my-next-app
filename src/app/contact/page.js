@@ -5,7 +5,7 @@ export default function Contact() {
     <div className="contact-container">
       <h1>Contact Us</h1>
       <p>
-        Have questions? We're here to help. Get in touch with **Rexo Trading** for any inquiries.
+        Have questions? re here to help. Get in touch with **Rexo Trading** for any inquiries.
       </p>
 
       <h2>Contact Information</h2>

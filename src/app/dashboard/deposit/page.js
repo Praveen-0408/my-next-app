@@ -1,122 +1,82 @@
 "use client";
+import { useState, useEffect } from "react"; // ✅ Import useEffect
+import { db, auth } from "@/firebase/config";
+import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth"; // ✅ Hook to get user auth details
+import styles from "../../styles/Deposit.module.css"; // Check path
+import Image from "next/image";
 
-import { useState } from "react";
+<Image src="/example.jpg" alt="Example Image" width={500} height={300} />
 
-export default function DepositFunds() {
+
+export default function Deposit() {
   const [amount, setAmount] = useState("");
-  const [method, setMethod] = useState("Bank Transfer");
-  const [transactions, setTransactions] = useState([]);
+  const [transactionId, setTransactionId] = useState("");
+  const [user, loading] = useAuthState(auth);
+  const [userName, setUserName] = useState("");
 
-  const handleDeposit = () => {
-    if (!amount || parseFloat(amount) <= 0) {
-      alert("Enter a valid deposit amount!");
+  // ✅ Fetch user name from Firestore
+  useEffect(() => {
+    if (user) {
+      const fetchUserName = async () => {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          setUserName(userSnap.data().name); // Assuming "name" is the field storing the username
+        }
+      };
+      fetchUserName();
+    }
+  }, [user]);
+
+  const handleDepositRequest = async () => {
+    if (!amount || !transactionId) {
+      alert("Please enter amount and transaction ID.");
       return;
     }
-    const newTransaction = {
-      id: transactions.length + 1,
-      type: "Deposit",
-      amount: parseFloat(amount),
-      method,
-      date: new Date().toLocaleString(),
-    };
-    setTransactions([newTransaction, ...transactions]);
-    alert(`Deposit of ${amount} USD via ${method} successful!`);
-    setAmount("");
+
+    try {
+      await addDoc(collection(db, "pendingTransactions"), {
+        userId: user?.uid, // ✅ Automatically fetch user ID
+        userName: userName, // ✅ Automatically fetch user name
+        type: "Deposit",
+        amount: parseFloat(amount),
+        transactionId: transactionId,
+        status: "Pending",
+        timestamp: serverTimestamp(),
+      });
+
+      alert("Deposit request submitted. Admin will verify and approve.");
+      setAmount("");
+      setTransactionId("");
+    } catch (error) {
+      console.error("Error submitting deposit request:", error);
+    }
   };
 
   return (
-    <div className="deposit-container">
-      <h2>Deposit Funds</h2>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Deposit Funds</h2>
+      <p>Scan the QR Code to make payment</p>
+      <Image src="/example.jpg" alt="Example Image" width={500} height={300} />
 
-      <label>Amount (USD):</label>
       <input
         type="number"
+        placeholder="Enter amount"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        placeholder="Enter amount"
+        className={styles.inputField}
       />
-
-      <label>Payment Method:</label>
-      <select value={method} onChange={(e) => setMethod(e.target.value)}>
-        <option>Bank Transfer</option>
-        <option>UPI</option>
-        <option>Crypto (BTC/ETH)</option>
-        <option>Credit/Debit Card</option>
-      </select>
-
-      <button onClick={handleDeposit}>Deposit</button>
-
-      <h3>Transaction History</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Method</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((txn) => (
-            <tr key={txn.id}>
-              <td>{txn.type}</td>
-              <td>{txn.amount} USD</td>
-              <td>{txn.method}</td>
-              <td>{txn.date}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <style jsx>{`
-        .deposit-container {
-          max-width: 500px;
-          margin: 20px auto;
-          padding: 20px;
-          border-radius: 10px;
-          background: #f8f9fa;
-          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-          text-align: center;
-        }
-        label {
-          display: block;
-          margin-top: 10px;
-          font-weight: bold;
-        }
-        input, select {
-          width: 100%;
-          padding: 8px;
-          margin-top: 5px;
-          border-radius: 5px;
-          border: 1px solid #ccc;
-        }
-        button {
-          background: #28a745;
-          color: white;
-          padding: 10px 15px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          margin-top: 10px;
-        }
-        button:hover {
-          background: #218838;
-        }
-        table {
-          width: 100%;
-          margin-top: 15px;
-          border-collapse: collapse;
-        }
-        th, td {
-          border: 1px solid #ddd;
-          padding: 10px;
-          text-align: center;
-        }
-        th {
-          background: #007bff;
-          color: white;
-        }
-      `}</style>
+      <input
+        type="text"
+        placeholder="Enter transaction ID"
+        value={transactionId}
+        onChange={(e) => setTransactionId(e.target.value)}
+        className={styles.inputField}
+      />
+      <button onClick={handleDepositRequest} className={styles.button}>
+        Submit Request
+      </button>
     </div>
   );
 }

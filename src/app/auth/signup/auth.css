@@ -1,65 +1,32 @@
-/* auth.css */
-
-.auth-container {
+.signup-container {
   max-width: 400px;
-  margin: 50px auto;
+  margin: auto;
   padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: #f4f4f4;
+  border-radius: 10px;
   text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.auth-container h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.auth-container form {
-  display: flex;
-  flex-direction: column;
-}
-
-.auth-container input {
-  padding: 12px;
-  margin: 8px 0;
-  border: 1px solid #ddd;
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-.auth-container button {
-  padding: 12px;
-  background-color: #ff9900;
-  border: none;
+button {
+  width: 100%;
+  padding: 10px;
+  background: black;
   color: white;
-  font-size: 16px;
+  border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
 }
 
-.auth-container button:hover {
-  background-color: #ff7700;
-}
-
-.otp-input {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.otp-input input {
-  width: 50px;
-  padding: 10px;
-  text-align: center;
-  font-size: 18px;
-}
-
-.error-message {
-  color: red;
-  margin-top: 10px;
-}
-
-.recaptcha-container {
-  display: none; /* Will be rendered dynamically */
+button:hover {
+  background: #333;
 }

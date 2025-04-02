@@ -1,64 +1,104 @@
-'use client';
+"use client";
 
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
 import { useRouter } from "next/navigation";
-import './auth.css';  // Make sure the path is correct.
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/firebase/config"; // ✅ Ensure correct Firebase import
+import "./auth.css";
+import Link from "next/link";
 
-
-const LoginPage = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
+export default function Login() {  // ✅ Ensure this is a default export
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  // Function to check valid email format
+  const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
+
+  const handleLogin = async () => {
+    setError("");
+    setLoading(true);
+
     try {
-      const email = `${phoneNumber}@example.com`; // Convert phone number to an email format for Firebase Authentication
+      if (!isValidEmail(email)) {
+        throw new Error("Please enter a valid email address.");
+      }
+
+      // Firebase sign-in with email
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      router.push("/dashboard"); // Redirect to dashboard or home page
-      
-      
-    } catch (error) {
-      setError(error.message);
+
+      // Fetch user data from Firestore using UID
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        throw new Error("User data not found in Firestore. Contact support.");
+      }
+
+      const userData = userSnap.data();
+      console.log("User Role:", userData.role); // ✅ Debugging
+      // ✅ Store the role in localStorage (or sessionStorage)
+      localStorage.setItem("userRole", userData.role);
+
+      // Redirect based on role
+      if (userData.role === "admin") {
+        alert("Admin Login Successful!");
+        router.push("/adminpanel");
+      } else {
+        alert("User Login Successful!");
+        router.push("/dashboard");
+      }
+    } catch (err) {
+      console.error("Login Error:", err.message);
+      setError(err.message || "Invalid login credentials. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-container">
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <div className="input-group">
-          <label>Email</label>
-          <input
-            type="tel"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            required
-            placeholder="Enter your phone number"
-          />
-        </div>
-        <div className="input-group">
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="Enter your password"
-          />
-        </div>
-        {error && <p className="error-message">{error}</p>}
-        <button type="submit" className="submit-btn">Login</button>
+    <div className="container">
+      <h2>Login</h2>
+      {error && <p className="error">{error}</p>}
+      
+      <form id="login-form" onSubmit={(e) => e.preventDefault()}>
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <br /><br />
+        
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <br /><br />
+        
+        <button 
+          type="button" 
+          className="btn" 
+          onClick={handleLogin}
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
-      <p className="signup-link">
-      Don&apos;t  have an account? <a href="/auth/signup">Sign up here</a>
+
+      <p>
+        Don&apos;t have an account? <Link href="/auth/signup">Sign Up</Link>
       </p>
     </div>
   );
 };
-
-export default LoginPage;

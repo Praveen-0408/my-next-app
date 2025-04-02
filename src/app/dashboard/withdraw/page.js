@@ -1,122 +1,57 @@
 "use client";
-
 import { useState } from "react";
+import { db, collection, addDoc, serverTimestamp } from "@/firebase/config";
+import styles from "../../styles/Deposit.module.css"; // Check path
 
-export default function WithdrawFunds() {
+export default function Withdraw() {
   const [amount, setAmount] = useState("");
-  const [method, setMethod] = useState("Bank Transfer");
-  const [transactions, setTransactions] = useState([]);
+  const [upiId, setUpiId] = useState("");
 
-  const handleWithdraw = () => {
-    if (!amount || parseFloat(amount) <= 0) {
-      alert("Enter a valid withdrawal amount!");
+  const handleWithdrawRequest = async () => {
+    if (!amount || amount <= 0 || !upiId) {
+      alert("Please enter a valid amount and UPI ID!");
       return;
     }
-    const newTransaction = {
-      id: transactions.length + 1,
-      type: "Withdraw",
-      amount: parseFloat(amount),
-      method,
-      date: new Date().toLocaleString(),
-    };
-    setTransactions([newTransaction, ...transactions]);
-    alert(`Withdrawal of ${amount} USD via ${method} successful!`);
-    setAmount("");
+
+    try {
+      await addDoc(collection(db, "pendingTransactions"), {
+        userId: "USER_ID_HERE", // Replace with actual user ID
+        userName: "USER_NAME_HERE", // Replace with actual user name
+        type: "Withdraw",
+        amount: parseFloat(amount),
+        upiId: upiId,
+        status: "Pending",
+        timestamp: serverTimestamp(),
+      });
+
+      alert("Withdrawal request submitted. Admin will process it.");
+      setAmount("");
+      setUpiId("");
+    } catch (error) {
+      console.error("Error submitting withdrawal request:", error);
+    }
   };
 
   return (
-    <div className="withdraw-container">
-      <h2>Withdraw Funds</h2>
-
-      <label>Amount (USD):</label>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Withdraw Funds</h2>
       <input
         type="number"
+        placeholder="Enter amount"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        placeholder="Enter amount"
+        className={styles.inputField}
       />
-
-      <label>Payment Method:</label>
-      <select value={method} onChange={(e) => setMethod(e.target.value)}>
-        <option>Bank Transfer</option>
-        <option>UPI</option>
-        <option>Crypto (BTC/ETH)</option>
-        <option>Credit/Debit Card</option>
-      </select>
-
-      <button onClick={handleWithdraw}>Withdraw</button>
-
-      <h3>Transaction History</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Method</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((txn) => (
-            <tr key={txn.id}>
-              <td>{txn.type}</td>
-              <td>{txn.amount} USD</td>
-              <td>{txn.method}</td>
-              <td>{txn.date}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <style jsx>{`
-        .withdraw-container {
-          max-width: 500px;
-          margin: 20px auto;
-          padding: 20px;
-          border-radius: 10px;
-          background: #f8f9fa;
-          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-          text-align: center;
-        }
-        label {
-          display: block;
-          margin-top: 10px;
-          font-weight: bold;
-        }
-        input, select {
-          width: 100%;
-          padding: 8px;
-          margin-top: 5px;
-          border-radius: 5px;
-          border: 1px solid #ccc;
-        }
-        button {
-          background: #dc3545;
-          color: white;
-          padding: 10px 15px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          margin-top: 10px;
-        }
-        button:hover {
-          background: #c82333;
-        }
-        table {
-          width: 100%;
-          margin-top: 15px;
-          border-collapse: collapse;
-        }
-        th, td {
-          border: 1px solid #ddd;
-          padding: 10px;
-          text-align: center;
-        }
-        th {
-          background: #007bff;
-          color: white;
-        }
-      `}</style>
+      <input
+        type="text"
+        placeholder="Enter your UPI ID"
+        value={upiId}
+        onChange={(e) => setUpiId(e.target.value)}
+        className={styles.inputField}
+      />
+      <button onClick={handleWithdrawRequest} className={styles.button}>
+        Submit Request
+      </button>
     </div>
   );
 }

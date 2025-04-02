@@ -1,0 +1,39 @@
+/* styles/globals.css */
+
+.trade-container {
+  max-width: 800px;
+  margin: 50px auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.trade-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.trade-table th, .trade-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.trade-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.trade-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.trade-table tr:hover {
+  background-color: #e6f7ff;
+}

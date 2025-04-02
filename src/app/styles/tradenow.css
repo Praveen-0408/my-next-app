@@ -1,0 +1,195 @@
+/* ---- Global Styles ---- */
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- Trade Now Page Styles ---- */
+.trade-now-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ---- Page Title ---- */
+.trade-now-title {
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #222;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ---- Table Titles ---- */
+.table-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #222;
+  padding-left: 10px;
+}
+
+/* ---- Table Styling ---- */
+.trade-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Header Row */
+.trade-table th {
+  background-color: #343638;
+  color: white;
+  font-weight: bold;
+  padding: 14px;
+  text-transform: uppercase;
+  border: none;
+}
+
+/* Table Rows */
+.trade-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Zebra Striping */
+.trade-table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+/* Hover Effect */
+.trade-table tbody tr:hover {
+  background-color: #e1e9ff;
+  transition: 0.3s ease;
+}
+
+/* ---- Responsive Design ---- */
+@media (max-width: 768px) {
+  .trade-now-title {
+    font-size: 26px;
+  }
+
+  .table-title {
+    font-size: 18px;
+  }
+
+  .trade-table th,
+  .trade-table td {
+    padding: 10px;
+  }
+}
+
+/* ---- Commodities Section ---- */
+.commodities-container {
+  padding: 20px;
+}
+
+/* Title */
+.commodities-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  padding-left: 10px;
+  color: #222;
+}
+
+/* Loading & Error Text */
+.loading-text {
+  color: blue;
+  font-size: 16px;
+  font-weight: 600;
+}
+.error-text {
+  color: red;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Table Wrapper */
+.commodities-table-wrapper {
+  overflow-x: auto;
+}
+
+/* Table */
+.commodities-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Header */
+.commodities-table thead {
+  background-color: #2b2e2c;
+  color: white;
+  text-transform: uppercase;
+}
+
+.commodities-table th {
+  padding: 12px;
+  border: none;
+  font-size: 14px;
+}
+
+/* Table Body */
+.commodities-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Striped Rows */
+.commodities-table tr:nth-child(even) {
+  background-color: #f2f7f5;
+}
+
+/* Hover Effect */
+.commodities-table tbody tr:hover {
+  background-color: #f4fbf6;
+  transition: 0.3s ease;
+}
+
+/* No Data Row */
+.no-data {
+  text-align: center;
+  font-weight: bold;
+  color: gray;
+  padding: 15px;
+}
+
+/* ---- Responsive Design ---- */
+@media (max-width: 768px) {
+  .commodities-title {
+    font-size: 20px;
+  }
+
+  .commodities-table th,
+  .commodities-table td {
+    padding: 10px;
+  }
+}
+
+
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.clickable-row:hover {
+  background-color: #e1e9ff;
+}

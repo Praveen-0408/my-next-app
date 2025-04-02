@@ -1,22 +1,34 @@
 // firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore"; // Import Firestore
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from "firebase/auth";
+
 
 // Your Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyAY7gKxpLmLqVAqQCCMoFUxw1gl8J4Gw-Q",
-  authDomain: "forexapp-e9d76.firebaseapp.com",
-  projectId: "forexapp-e9d76",
-  storageBucket: "forexapp-e9d76.appspot.com", // Fix incorrect storageBucket
-  messagingSenderId: "2302288079",
-  appId: "1:2302288079:web:c15889c58d5acf9d8fd7ba",
-  measurementId: "G-VCQ2854BES",
+  apiKey: "AIzaSyBnTsG05fdVfR_2Z3fDrETHolnBi_Hi_jM",
+  authDomain: "forex-43581.firebaseapp.com",
+  projectId: "forex-43581",
+  storageBucket: "forex-43581.firebasestorage.app",
+  messagingSenderId: "408517009635",
+  appId: "1:408517009635:web:1b6d376278db9aba3925d6",
+  measurementId: "G-2JZ8V7QHH6"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app); // Initialize Firestore
+const googleProvider = new GoogleAuthProvider();
 
-export { auth, db, app };
+// Set up reCAPTCHA verifier
+const setupRecaptcha = () => {
+  if (!window.recaptchaVerifier) {
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+      size: "invisible",
+      callback: (response) => {
+        console.log("reCAPTCHA solved", response);
+      },
+    });
+  }
+};
+
+export { auth, RecaptchaVerifier, signInWithPhoneNumber, googleProvider, signInWithPopup, sendEmailVerification };
