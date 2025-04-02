@@ -1,3 +1,4 @@
+'use client'; // Add this at the top
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 

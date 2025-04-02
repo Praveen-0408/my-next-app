@@ -37,3 +37,11 @@
 .trade-table tr:hover {
   background-color: #e6f7ff;
 }
+
+
+/* Basic Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}

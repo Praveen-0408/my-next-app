@@ -1,4 +1,4 @@
-// components/Layout.js
+'use client'; // Add this at the top
 import Head from 'next/head';
 import { useState, useEffect, useRef } from 'react';
 import MenuDropdown from '@/components/MenuDropdown';
