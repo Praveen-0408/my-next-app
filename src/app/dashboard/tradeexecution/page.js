@@ -1,8 +1,9 @@
     "use client";
     import { useState, useEffect, useCallback} from "react";
-    import { db, doc, getDoc, updateDoc, collection, addDoc, serverTimestamp } from "@/firebase/config";
+    import { db } from "@/firebase/config";
     import { useSearchParams, useRouter } from "next/navigation"; 
-    import { auth } from "@/firebase/config"; // Firebase Authentication
+    import { doc, getDoc, updateDoc, collection, addDoc, serverTimestamp } from "firebase/firestore";
+    import { auth } from "@/firebase/auth"; // Firebase Authentication
     import { commodityData } from "@/utils/commodityData";
 
 
