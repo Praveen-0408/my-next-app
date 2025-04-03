@@ -3,7 +3,7 @@
     import { db } from "@/firebase/config";
     import { doc, getDoc, updateDoc, collection, addDoc, serverTimestamp } from "firebase/firestore";
     import { useSearchParams, useRouter } from "next/navigation"; 
-    import { auth } from "@/firebase/auth"; // Firebase Authentication
+    import { auth } from "@/firebase/config"; // Firebase Authentication
     import { commodityData } from "@/utils/commodityData";
 
 
