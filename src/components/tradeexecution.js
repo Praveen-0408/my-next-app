@@ -6,13 +6,13 @@
     
 
 
-    const TradeExecution = () => {  // ✅ Ensure commodityData is passed as prop
+    const TradeExecution = ({commodityData}) => { 
+        const [data, setData] = useState(null);
         const router = useRouter();
         const searchParams = useSearchParams(); // ✅ Read asset from URL
-        const assetFromURL = searchParams.get("asset") || "USD/INR"; // Default to USD/INR
         const [user, setUser] = useState(null);
         const [userId, setUserId] = useState(null);
-        const [selectedAsset, setSelectedAsset] = useState(assetFromURL); // ✅ Set initial asset from URL
+        const [selectedAsset, setSelectedAsset] = useState("USD/INR"); // Default value
         const [tradeType, setTradeType] = useState("Market Order");
         const [lotSize, setLotSize] = useState(0);
         const [bidPrice, setBidPrice] = useState(null);
@@ -23,6 +23,16 @@
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(null);
 
+    
+
+        useEffect(() => {
+            if (searchParams) {
+                const assetFromURL = searchParams.get("asset"); // ✅ Fix: Get parameter inside useEffect
+                if (assetFromURL) {
+                    setSelectedAsset(assetFromURL);
+                }
+            }
+        }, [searchParams]);
         
 
 
@@ -68,7 +78,7 @@
                     setLoading(false);
 
                 }
-            }, [selectedAsset]); // ✅ Added assetSymbolMap
+            }, [commodityData]); // Add commodityData as a dependency
 
             useEffect(() => {
                 console.log("🔄 selectedAsset changed:", selectedAsset);
