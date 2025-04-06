@@ -3,10 +3,12 @@
     import { db, doc, getDoc, updateDoc, collection, addDoc, serverTimestamp} from "@/firebase/config";
     import { useSearchParams, useRouter } from "next/navigation"; 
     import { auth } from "@/firebase/config"; // Firebase Authentication
+
+
     
 
 
-    const TradeExecution = ({commodityData}) => { 
+    const TradeExecution = ({ commodityData }) => {
         const [data, setData] = useState(null);
         const router = useRouter();
         const searchParams = useSearchParams(); // ✅ Read asset from URL
@@ -23,69 +25,76 @@
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(null);
 
+        console.log("🎯 Received commodityData:", commodityData);
+        console.log("🎯 Is Array?", Array.isArray(commodityData));
+
+
     
 
         useEffect(() => {
-            if (searchParams) {
-                const assetFromURL = searchParams.get("asset"); // ✅ Fix: Get parameter inside useEffect
-                if (assetFromURL) {
-                    setSelectedAsset(assetFromURL);
-                }
+            const assetFromURL = searchParams.get("asset");
+            console.log("🌐 Asset from URL:", assetFromURL);
+            if (assetFromURL) {
+                setSelectedAsset(assetFromURL);
             }
         }, [searchParams]);
+      
+    
         
 
 
         
             // ✅ Fetch prices from the commodity table
             const fetchAssetPrices = useCallback(() => {
-                if (!selectedAsset) return;
-                    
-        
-                setLoading(true);
-                setError(null);    
-                
+                try {
+                    console.log("🧪 Available symbols:", commodityData.map(c => c.symbol));
+                    console.log("🧪 Selected asset:", selectedAsset);
+                    console.log("📋 Available Names:", commodityData.map(item => item.name));
 
-            try {
-                console.log("Fetching asset prices for:", selectedAsset);
-                console.log("📊 Available commodityData:", commodityData);
 
-                
+
+
+                   
 
                 // Fetch data from the table instead of API
-                const assetData = commodityData.find(asset => asset.symbol === selectedAsset);
-                    if (assetData) {
-                        console.log(`✅ Updated Prices -> Bid: ${assetData.bid}, Ask: ${assetData.ask}`);
-
-                        setBidPrice(parseFloat(assetData.bid) || 0);
-                        setAskPrice(parseFloat(assetData.ask) || 0);
+                const assetData = commodityData.find(
+                    (asset) => asset.symbol === selectedAsset
+                );
+                if (!assetData) {
+                    throw new Error("Selected asset not found");
+                }
+                       
+                setAskPrice(assetData.ask || 0);
+                setBidPrice(assetData.bid || 0);
+              
+                setLoading(false); // ✅ Important!
+                console.log("✅ Asset Prices Fetched:", assetData);
                         
-
-                        
-                    } else {
-                        throw new Error(`❌ Asset '${selectedAsset}' not found in commodityData.`);
-                        setBidPrice(0);
-                        setAskPrice(0);
-            
-                    }
+                 
 
                 } catch (error) {
                     console.error("Error fetching asset prices:", error);
                     
+                    
                     setError(error.message);
-                } finally {
-
-                    setLoading(false);
-
+                    setBidPrice(0);
+                    setAskPrice(0);
+                    setLoading(false); // ✅ Important!
+                
                 }
-            }, [commodityData]); // Add commodityData as a dependency
-
+            }, [commodityData, selectedAsset]);
+           
             useEffect(() => {
-                console.log("🔄 selectedAsset changed:", selectedAsset);
-                fetchAssetPrices();
-            }, [selectedAsset, fetchAssetPrices]);
-            
-            
+                if (commodityData && Array.isArray(commodityData) && commodityData.length > 0) {
+                    fetchAssetPrices();
+                }
+            }, [selectedAsset, fetchAssetPrices,commodityData]);
+
+
+
+
+
+
             // Handle Trade Execution
             const handleTrade = async (type, user, userId, lotSize, price, selectedAsset, tradeType, limitPrice = 0, stopPrice = 0, router) => {
                 console.log("Trade Execution Attempt:", { 
