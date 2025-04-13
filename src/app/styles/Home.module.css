@@ -1,4 +1,4 @@
-html {
+html .scroll-container {
   scroll-behavior: smooth;
 }
 
