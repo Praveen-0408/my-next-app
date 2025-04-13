@@ -24,22 +24,28 @@
         const [limitPrice, setLimitPrice] = useState(0);
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(null);
+        const symbolFromURL = searchParams.get("symbol");
+        const bidFromURL = searchParams.get("bid");
+        const askFromURL = searchParams.get("ask");
 
         console.log("🎯 Received commodityData:", commodityData);
         console.log("🎯 Is Array?", Array.isArray(commodityData));
 
+        
 
     
 
         useEffect(() => {
-            const assetFromURL = searchParams.get("asset");
-            console.log("🌐 Asset from URL:", assetFromURL);
-            if (assetFromURL) {
-                setSelectedAsset(assetFromURL);
-            }
-        }, [searchParams]);
-      
-    
+            if (symbolFromURL) setSelectedAsset(symbolFromURL);
+            if (bidFromURL) setBidPrice(parseFloat(bidFromURL));
+            if (askFromURL) setAskPrice(parseFloat(askFromURL));
+            console.log("📩 Symbol from URL:", symbolFromURL);
+        }, [symbolFromURL, bidFromURL, askFromURL]);
+
+        const normalize = (str) => str?.toLowerCase().trim();
+        const formatPrice = (val) => Number(val).toFixed(2);
+
+
         
 
 
@@ -49,7 +55,14 @@
                 try {
                     console.log("🧪 Available symbols:", commodityData.map(c => c.symbol));
                     console.log("🧪 Selected asset:", selectedAsset);
-                    console.log("📋 Available Names:", commodityData.map(item => item.name));
+
+                    if (!Array.isArray(commodityData) || commodityData.length === 0) {
+                        throw new Error("Commodity data is empty or not an array");
+                    }
+                    console.log("🧪 Available symbols:");
+                    commodityData.forEach((item, i) => {
+                        console.log(`[${i}] Symbol: ${item.Symbol}, Name: ${item.Name}`);
+                    });
 
 
 
@@ -58,17 +71,18 @@
 
                 // Fetch data from the table instead of API
                 const assetData = commodityData.find(
-                    (asset) => asset.symbol === selectedAsset
+                    (asset) => normalize(asset?.Symbol) === normalize(selectedAsset)
                 );
-                if (!assetData) {
+                console.log("🎯 Matched assetData:", assetData);
+                if (!assetData || assetData.Bid === undefined || assetData.Ask === undefined) {
                     throw new Error("Selected asset not found");
                 }
                        
-                setAskPrice(assetData.ask || 0);
-                setBidPrice(assetData.bid || 0);
-              
+                setBidPrice(parseFloat(assetData.Bid));
+                setAskPrice(parseFloat(assetData.Ask));
                 setLoading(false); // ✅ Important!
-                console.log("✅ Asset Prices Fetched:", assetData);
+                console.log("✅ Render Bid Price:", assetData.Bid, "Loading:", false);
+                console.log("✅ Render Ask Price:", assetData.Ask, "Loading:", false);
                         
                  
 
@@ -85,7 +99,7 @@
             }, [commodityData, selectedAsset]);
            
             useEffect(() => {
-                if (commodityData && Array.isArray(commodityData) && commodityData.length > 0) {
+                if (commodityData?.length > 0) {
                     fetchAssetPrices();
                 }
             }, [selectedAsset, fetchAssetPrices,commodityData]);

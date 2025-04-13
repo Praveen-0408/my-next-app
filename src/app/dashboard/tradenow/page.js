@@ -1,100 +1,177 @@
-"use client";
-import { useRouter } from "next/navigation";
+'use client';
 
-// ✅ Exporting commodity data
-export const commodityData = [
-  { name: "Gold", symbol: "GC=F", ask: 1952.50, bid: 1948.50, high: 1965.00, low: 1940.00 },
-  { name: "Silver", symbol: "SI=F", ask: 24.90, bid: 24.70, high: 25.30, low: 24.50 },
-  { name: "Crude Oil", symbol: "CL=F", ask: 75.80, bid: 75.20, high: 77.00, low: 74.50 },
-  { name: "Soybean", symbol: "ZS=F", ask: 1342.50, bid: 1338.00, high: 1355.00, low: 1330.00 },
-  { name: "Corn", symbol: "ZC=F", ask: 581.50, bid: 578.50, high: 590.00, low: 570.00 },
-  { name: "Wheat", symbol: "ZW=F", ask: 652.00, bid: 649.50, high: 660.00, low: 640.00 },
-  { name: "Brent Oil", symbol: "BZ=F", ask: 80.10, bid: 79.50, high: 81.00, low: 78.50 },
-  { name: "Palladium", symbol: "PA=F", ask: 1253.00, bid: 1248.50, high: 1265.00, low: 1235.00 },
-  { name: "Platinum", symbol: "PL=F", ask: 1017.50, bid: 1013.50, high: 1030.00, low: 1005.00 },
-  { name: "Natural Gas", symbol: "NG=F", ask: 2.88, bid: 2.82, high: 3.00, low: 2.75 },
-  { name: "USD/INR", symbol: "USDINR=X", ask: 83.20, bid: 83.00, high: 84.00, low: 82.50 },
-];
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-// ✅ Inline styles
-const styles = {
-  container: {
-    padding: "20px",
-    backgroundColor: "#f8f9fa",
-    borderRadius: "8px",
-    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-  },
-  table: {
-    width: "100%",
-    borderCollapse: "collapse",
-    marginTop: "10px",
-  },
-  th: {
-    backgroundColor: "#007bff",
-    color: "white",
-    padding: "10px",
-    border: "1px solid #ddd",
-    textAlign: "center",
-  },
-  td: {
-    padding: "10px",
-    border: "1px solid #ddd",
-    textAlign: "center",
-    cursor: "pointer",
-  },
-  rowHover: {
-    backgroundColor: "#f1f1f1",
-  },
-  greenText: {
-    color: "green",
-    fontWeight: "bold",
-  },
-  redText: {
-    color: "red",
-    fontWeight: "bold",
-  },
-};
-
-const CommoditiesTable = () => {
+export default function TradeNow() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const goToTradePage = (commodity) => {
-    router.push(
-      `/dashboard/tradeexecution?asset=${commodity.symbol}&name=${commodity.name}&ask=${commodity.ask}&bid=${commodity.bid}&high=${commodity.high}&low=${commodity.low}`
-    );
+  const fetchCommodities = async () => {
+    try {
+      const res = await fetch('/api/commodities', { cache: 'no-store' });
+      if (!res.ok) throw new Error('Failed to fetch');
+
+      const json = await res.json();
+
+      const allowedSymbols = [
+        "USD/INR",
+        "GOLD/FUT",
+        "XAU/USD",
+        "SILVER/FUT",
+        "XAG/USD",
+        "COPPER/USD",
+        "PLATINUM/USD",
+        "PALLADIUM/USD",
+        "WTI/USD",
+        "BRENT/USD",
+        "COPPER/USD",
+        "WHEAT/USD",
+        "CORN/USD",
+        "SOYBEANS/USD",
+      ];
+
+      // Filter commodities based on allowed symbols
+      const filtered = json.filter(item => allowedSymbols.includes(item.Symbol));
+
+      setData(filtered);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCommodities();
+    const interval = setInterval(fetchCommodities, 60000); // Fetch every 1 minute (60,000 ms)
+    return () => clearInterval(interval); // Clean up interval when component is unmounted
+  }, []);
+
+  const handleRowClick = (item) => {
+   
+      
+    router.push(`/dashboard/tradeexecution?symbol=${encodeURIComponent(item.Symbol)}&ask=${encodeURIComponent(item.Ask)}&bid=${encodeURIComponent(item.Bid)}`);
   };
 
   return (
     <div style={styles.container}>
-      <h2 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "10px" }}>
-        Commodities Prices
-      </h2>
-      <table style={styles.table}>
-        <thead>
-          <tr>
-            <th style={styles.th}>Commodity</th>
-            <th style={styles.th}>Symbol</th>
-            <th style={styles.th}>Ask Price</th>
-            <th style={styles.th}>Bid Price</th>
-            <th style={styles.th}>High</th>
-            <th style={styles.th}>Low</th>
-          </tr>
-        </thead>
-        <tbody>
-          {commodityData.map((item, index) => (
-            <tr key={index} style={{ ...styles.td, ...styles.rowHover }} onClick={() => goToTradePage(item)}>
-              <td style={styles.td}>{item.name}</td>
-              <td style={styles.td}>{item.symbol}</td>
-              <td style={{ ...styles.td, ...styles.greenText }}>${item.ask.toFixed(2)}</td>
-              <td style={{ ...styles.td, ...styles.redText }}>${item.bid.toFixed(2)}</td>
-              <td style={styles.td}>${item.high.toFixed(2)}</td>
-              <td style={styles.td}>${item.low.toFixed(2)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h1 style={styles.title}>Trade Now</h1>
+
+      {loading ? (
+        <div style={styles.spinnerWrapper}>
+          <div style={styles.spinner}></div>
+        </div>
+      ) : (
+        <div style={styles.tableWrapper}>
+          <table style={styles.table}>
+            <thead>
+              <tr style={styles.headerRow}>
+                <th style={styles.th}>Name</th>
+                <th style={styles.th}>Symbol</th>
+                <th style={styles.th}>Price</th> {/* Added price column */}
+                <th style={styles.th}>Bid</th>
+                <th style={styles.th}>Ask</th>
+                <th style={styles.th}>High</th>
+                <th style={styles.th}>Low</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(data) &&
+                data.map((item, i) => (
+                  <tr
+                    key={i}
+                    onClick={() => handleRowClick(item)}
+                    style={{
+                      ...styles.row,
+                      backgroundColor: i % 2 === 0 ? '#fff' : '#f9fafb',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <td style={styles.td}>{item.Name}</td>
+                    <td style={styles.td}>{item.Symbol}</td>
+                    <td style={styles.td}>{parseFloat(item.Price).toFixed(2)}</td> 
+                    <td style={styles.td}>{parseFloat(item.Bid).toFixed(2)}</td>
+                    <td style={styles.td}>{parseFloat(item.Ask).toFixed(2)}</td>
+                    <td style={styles.td}>{parseFloat(item.High).toFixed(2)}</td>
+                    <td style={styles.td}>{parseFloat(item.Low).toFixed(2)}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
+}
+
+const styles = {
+  container: {
+    padding: '1.5rem',
+    minHeight: '100vh',
+    backgroundColor: '#f9fafb',
+  },
+  title: {
+    fontSize: '1.875rem',
+    fontWeight: 'bold',
+    color: '#1f2937',
+    marginBottom: '1.5rem',
+  },
+  spinnerWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '16rem',
+  },
+  spinner: {
+    width: '2.5rem',
+    height: '2.5rem',
+    border: '0.25rem solid #000000',
+    borderTopColor: 'transparent',
+    borderRadius: '9999px',
+    animation: 'spin 1s linear infinite',
+  },
+  tableWrapper: {
+    overflowX: 'auto',
+    borderRadius: '0.75rem',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'white',
+  },
+  table: {
+    width: '100%',
+    fontSize: '0.875rem',
+    textAlign: 'left',
+    color: '#374151',
+    borderCollapse: 'collapse',
+  },
+  headerRow: {
+    backgroundColor: '#000000',
+    color: '#ffffff',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+  },
+  th: {
+    padding: '0.75rem 1rem',
+    color: '#ffffff', // Change header text color to black
+  },
+  td: {
+    padding: '0.5rem 1rem',
+    fontWeight: '500',
+    color: '#000000', // Black text for data rows
+  },
+  row: {
+    transition: 'background-color 0.3s',
+  },
 };
 
-export default CommoditiesTable;
+// Add keyframe manually since inline styles don’t support it
+if (typeof window !== 'undefined') {
+  const styleSheet = document.styleSheets[0];
+  const keyframes =
+    `@keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }`;
+  styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
+}

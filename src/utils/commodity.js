@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 // ✅ Exporting commodity data
 export const commodityData = [
-  { name: "Gold", symbol: "GC=F", ask: 1952.50, bid: 1948.50, high: 1965.00, low: 1940.00 },
+  { name: "Gold", symbol: "USD/INR", ask: 1952.50, bid: 1948.50, high: 1965.00, low: 1940.00 },
   { name: "Silver", symbol: "SI=F", ask: 24.90, bid: 24.70, high: 25.30, low: 24.50 },
   { name: "Crude Oil", symbol: "CL=F", ask: 75.80, bid: 75.20, high: 77.00, low: 74.50 },
   { name: "Soybean", symbol: "ZS=F", ask: 1342.50, bid: 1338.00, high: 1355.00, low: 1330.00 },
@@ -13,7 +13,7 @@ export const commodityData = [
   { name: "Palladium", symbol: "PA=F", ask: 1253.00, bid: 1248.50, high: 1265.00, low: 1235.00 },
   { name: "Platinum", symbol: "PL=F", ask: 1017.50, bid: 1013.50, high: 1030.00, low: 1005.00 },
   { name: "Natural Gas", symbol: "NG=F", ask: 2.88, bid: 2.82, high: 3.00, low: 2.75 },
-  { name: "USD/INR", symbol: "USDINR=X", ask: 83.20, bid: 83.00, high: 84.00, low: 82.50 },
+  { name: "USD/INR", symbol: "USD/INR", ask: 83.20, bid: 83.00, high: 84.00, low: 82.50 },
 ];
 
 // ✅ Inline styles
