@@ -1,6 +1,6 @@
 export async function GET() {
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbyN38qRXWUYIne9--xtfIv811YJSq5-7tqtbmEIJf0-MnbfIc7SfqRnnVvU3_uo4jlnpw/exec'); // replace with your real URL
+    const response = await fetch('https://script.google.com/macros/s/AKfycbyOecDO5aeP0_eC_fHHFHYZLVTtH2WDvk5w18wYnQSXBfgMd8RQvCSpyomxlw9RY1K4/exec'); // replace with your real URL
 
     if (!response.ok) {
       return new Response(JSON.stringify({ error: 'Failed to fetch commodities data' }), { status: 500 });

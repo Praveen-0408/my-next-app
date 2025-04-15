@@ -14,6 +14,7 @@ export default function TradeNow() {
       if (!res.ok) throw new Error('Failed to fetch');
 
       const json = await res.json();
+      console.log('Received data:', json); // ⬅️ Check what you're getting
 
       const allowedSymbols = [
         "USD/INR",
@@ -26,16 +27,15 @@ export default function TradeNow() {
         "PALLADIUM/USD",
         "WTI/USD",
         "BRENT/USD",
-        "COPPER/USD",
+        "NG/USD",
         "WHEAT/USD",
         "CORN/USD",
         "SOYBEANS/USD",
       ];
 
-      // Filter commodities based on allowed symbols
-      const filtered = json.filter(item => allowedSymbols.includes(item.Symbol));
+  
 
-      setData(filtered);
+      setData(json);
     } catch (err) {
       console.error('Error fetching data:', err);
     } finally {

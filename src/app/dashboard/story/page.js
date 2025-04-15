@@ -63,7 +63,7 @@ const TransactionHistory = () => {
                                 <th style={styles.th}>Asset</th>
                                 <th style={styles.th}>Lot Size</th>
                                 <th style={styles.th}>Price</th>
-                                <th style={styles.th}>Total</th>
+                        
                                 <th style={styles.th}>Order Type</th>
                                 <th style={styles.th}>Timestamp</th>
                             </tr>
@@ -75,7 +75,7 @@ const TransactionHistory = () => {
                                     <td style={styles.td}>{tx.asset}</td>
                                     <td style={styles.td}>{tx.lotSize}</td>
                                     <td style={styles.td}>${tx.price.toFixed(2)}</td>
-                                    <td style={styles.totalAmount}>${tx.total.toFixed(2)}</td>
+                                
                                     <td style={styles.td}>{tx.orderType}</td>
                                     <td style={styles.td}>{tx.timestamp ? new Date(tx.timestamp.seconds * 1000).toLocaleString() : "N/A"}</td>
                                 </tr>
@@ -116,7 +116,7 @@ const styles = {
         border: "1px solid #ddd",
     },
     th: {
-        backgroundColor: "#007bff",
+        backgroundColor: "black",
         color: "white",
         padding: "10px",
         border: "1px solid #ddd",
