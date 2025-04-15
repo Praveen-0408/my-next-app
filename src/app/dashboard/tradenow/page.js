@@ -79,7 +79,9 @@ export default function TradeNow() {
             </thead>
             <tbody>
               {Array.isArray(data) &&
-                data.map((item, i) => (
+                data
+                .filter(item => item.Symbol) // Filter out items where Symbol is empty or undefined
+                .map((item, i) => (
                   <tr
                     key={i}
                     onClick={() => handleRowClick(item)}
