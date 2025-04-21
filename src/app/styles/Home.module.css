@@ -291,10 +291,7 @@
     white-space: nowrap; /* prevent text wrap */
   }
 
-  body {
-    padding-bottom: 80px; /* make space for sidebar */
-  }
-
+ 
   .menuBtn {
     font-size: 28px;
   }
