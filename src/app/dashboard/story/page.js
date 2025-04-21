@@ -129,6 +129,7 @@ const TransactionHistory = () => {
                                 <th style={styles.th}>Price</th>
                                 <th style={styles.th}>P/L%</th>
                                 <th style={styles.th}>P/l price</th>
+                                <th style={styles.th}>present value</th>
                                 <th style={styles.th}>Order Type</th>
                                 <th style={styles.th}>Timestamp</th>
                             </tr>
@@ -140,6 +141,7 @@ const TransactionHistory = () => {
                                  const purchasePrice = tx.price;
                                  let plPercent = "-";
                                  let plPrice = "-";
+                                 let presentValue = "-";
 
                                  if (priceData && purchasePrice) {
                                     const currentPrice = 
@@ -154,6 +156,10 @@ const TransactionHistory = () => {
                                          const plDecimal = plValue / 100;
                                          const plPriceValue = tx.lotSize * purchasePrice * plDecimal;
                                          plPrice = plPriceValue.toFixed(2);
+
+                                         // ✅ Calculate Present Value using purchasePrice
+                                         presentValue = (tx.lotSize * purchasePrice + parseFloat(plPrice)).toFixed(2);
+
 
 
 
@@ -177,6 +183,7 @@ const TransactionHistory = () => {
                                     <td style={styles.td}>${tx.price.toFixed(2)}</td>
                                     <td style={styles.td}>{plPercent}</td>
                                     <td style={styles.td}>{plPrice !== "-" ? `$${plPrice}` : "-"}</td>
+                                    <td style={styles.td}>{presentValue !== "-" ? `$${presentValue}` : "-"}</td>
                                     <td style={styles.td}>{tx.orderType}</td>
                                     <td style={styles.td}>
                                     {tx.timestamp
