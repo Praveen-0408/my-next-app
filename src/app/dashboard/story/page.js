@@ -128,6 +128,7 @@ const TransactionHistory = () => {
                                 <th style={styles.th}>Lot Size</th>
                                 <th style={styles.th}>Price</th>
                                 <th style={styles.th}>P/L%</th>
+                                <th style={styles.th}>P/l price</th>
                                 <th style={styles.th}>Order Type</th>
                                 <th style={styles.th}>Timestamp</th>
                             </tr>
@@ -138,15 +139,25 @@ const TransactionHistory = () => {
                                  const priceData = commodityPrices[assetSymbol];
                                  const purchasePrice = tx.price;
                                  let plPercent = "-";
+                                 let plPrice = "-";
 
                                  if (priceData && purchasePrice) {
-                                    const currentPrice =
+                                    const currentPrice = 
                                     tx.type === "Buy" ? priceData.Ask :
                                     tx.type === "Sell" ? priceData.Bid :
                                     null;
                                     if (currentPrice) {
                                         const plValue = ((currentPrice - purchasePrice) / purchasePrice) * 100;
                                         plPercent = plValue.toFixed(2) + "%";
+
+                                         // ✅ Calculate P/L price
+                                         const plDecimal = plValue / 100;
+                                         const plPriceValue = tx.lotSize * purchasePrice * plDecimal;
+                                         plPrice = plPriceValue.toFixed(2);
+
+
+
+
                                         console.log(
                                             `Asset: ${tx.asset} | Type: ${tx.type} | Buy/Sell Price: ${purchasePrice} | Current Price: ${currentPrice} | P/L%: ${plPercent}`
                                           );
@@ -165,6 +176,7 @@ const TransactionHistory = () => {
                                     <td style={styles.td}>{tx.lotSize}</td>
                                     <td style={styles.td}>${tx.price.toFixed(2)}</td>
                                     <td style={styles.td}>{plPercent}</td>
+                                    <td style={styles.td}>{plPrice !== "-" ? `$${plPrice}` : "-"}</td>
                                     <td style={styles.td}>{tx.orderType}</td>
                                     <td style={styles.td}>
                                     {tx.timestamp

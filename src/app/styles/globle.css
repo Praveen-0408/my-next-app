@@ -45,3 +45,80 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* ✅ Extra Small Devices (phones, <576px) */
+@media (max-width: 575.98px) {
+  .trade-container {
+    margin: 30px 10px;
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .trade-table {
+    font-size: 14px;
+    overflow-x: auto;
+    display: block;
+  }
+
+  .trade-table th,
+  .trade-table td {
+    padding: 8px;
+  }
+}
+
+/* ✅ Small Devices (≥576px and <768px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .trade-container {
+    margin: 40px auto;
+    padding: 10px 15px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .trade-table {
+    font-size: 15px;
+  }
+
+  .trade-table th,
+  .trade-table td {
+    padding: 9px;
+  }
+}
+
+/* ✅ Medium Devices (tablets, ≥768px and <992px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .trade-container {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .trade-table {
+    font-size: 16px;
+  }
+}
+
+/* ✅ Large Devices (desktops, ≥992px) */
+@media (min-width: 992px) {
+  .trade-container {
+    max-width: 800px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .trade-table {
+    font-size: 17px;
+  }
+}
+

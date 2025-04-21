@@ -1,78 +1,128 @@
 
- /* Correct way for CSS Modules */
-styles.container {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  margin: 0 auto;
-  padding: 20px;
-  max-width: 400px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.title {
-  color: #333;
-}
-
-.inputField {
-  width: 90%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.button {
-  background-color: #181818;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 100%;
-}
-
-.button:hover {
-  background-color: #1e1e1e;
-}
-
-
-/* styles/Withdraw.module.css */
+ /* styles/Withdraw.module.css */
 
 .container {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
-  margin: 20px auto;
-  padding: 20px;
+  margin: 10px auto;
+  padding: 16px;
+  width: 90%;
   max-width: 400px;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
 .title {
   color: #333;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
 }
 
 .inputField {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin: 10px 0;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .button {
   background-color: #282928;
   color: white;
-  padding: 10px;
+  padding: 12px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
   width: 100%;
+  font-size: 1rem;
 }
 
 .button:hover {
   background-color: #1a1b1b;
+}
+
+/* ✅ Extra Small Devices (phones, <576px) */
+@media (max-width: 575.98px) {
+  .container {
+    padding: 12px;
+    width: 95%;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .inputField {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+
+  .button {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+}
+
+/* ✅ Small Devices (phones landscape, ≥576px and <768px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .container {
+    padding: 14px;
+    width: 90%;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .inputField {
+    padding: 11px;
+    font-size: 1rem;
+  }
+
+  .button {
+    padding: 11px;
+    font-size: 1rem;
+  }
+}
+
+/* ✅ Medium Devices (tablets, ≥768px and <992px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .container {
+    max-width: 450px;
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 1.3rem;
+  }
+
+  .inputField {
+    font-size: 1.05rem;
+  }
+
+  .button {
+    font-size: 1.05rem;
+  }
+}
+
+/* ✅ Large Devices (desktops, ≥992px) */
+@media (min-width: 992px) {
+  .container {
+    max-width: 500px;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .inputField {
+    font-size: 1.1rem;
+  }
+
+  .button {
+    font-size: 1.1rem;
+  }
 }

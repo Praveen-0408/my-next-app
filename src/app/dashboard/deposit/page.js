@@ -58,7 +58,7 @@ export default function Deposit() {
     <div className={styles.container}>
       <h2 className={styles.title}>Deposit Funds</h2>
       <p>Scan the QR Code to make payment</p>
-      <Image src="/qrcode.svg" alt="Image" width={400} height={200} priority />
+      <Image src="/qrcode.svg" alt="QR Code" width={400} height={200} priority />
 
       <input
         type="number"
