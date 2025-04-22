@@ -149,11 +149,6 @@
 }
 
 
-/* Wrapper for Scrollable Table */
-.tableWrapper {
-  width: 100%;
-  overflow-x: auto;
-}
 
 /* Table Styling */
 .tableContainer {
