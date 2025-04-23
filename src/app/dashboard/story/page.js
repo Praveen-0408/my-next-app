@@ -130,7 +130,6 @@ const TransactionHistory = () => {
                                 <th style={styles.th}>P/L%</th>
                                 <th style={styles.th}>P/l price</th>
                                 <th style={styles.th}>present value</th>
-                                <th style={styles.th}>Order Type</th>
                                 <th style={styles.th}>Timestamp</th>
                             </tr>
                         </thead>
@@ -180,11 +179,10 @@ const TransactionHistory = () => {
                                     <td style={styles.td}>{tx.type}</td>
                                     <td style={styles.td}>{tx.asset}</td>
                                     <td style={styles.td}>{tx.lotSize}</td>
-                                    <td style={styles.td}>${tx.price.toFixed(2)}</td>
+                                    <td style={styles.td}>{tx.price.toFixed(2)}</td>
                                     <td style={styles.td}>{plPercent}</td>
-                                    <td style={styles.td}>{plPrice !== "-" ? `$${plPrice}` : "-"}</td>
-                                    <td style={styles.td}>{presentValue !== "-" ? `$${presentValue}` : "-"}</td>
-                                    <td style={styles.td}>{tx.orderType}</td>
+                                    <td style={styles.td}>{plPrice !== "-" ? `${plPrice}` : "-"}</td>
+                                    <td style={styles.td}>{presentValue !== "-" ? `${presentValue}` : "-"}</td>
                                     <td style={styles.td}>
                                     {tx.timestamp
                                            ? new Date(tx.timestamp.seconds * 1000).toLocaleString()
