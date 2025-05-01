@@ -225,18 +225,60 @@
                             return;
                         }
                         updatedBalance -= cost;
-                        updatedPortfolio[selectedAsset] = (updatedPortfolio[selectedAsset] || 0) + lotSize;
+                        updatedPortfolio[selectedAsset] = updatedPortfolio[selectedAsset] || [];
+
+                        // Add the buy details (lotSize and price) to the portfolio (FIFO - push to the end)
+
+                        updatedPortfolio[selectedAsset].push({
+                            lotSize,        // How many lots bought in this transaction
+                            price,          // Purchase price per lot
+                            timestamp: Date.now(),  // Purchase time to track the order
+        });
+
                         console.log("Buy Order Executed: New Balance:", updatedBalance);
 
 
                     } else if (type === "Sell") {
                         console.log("Checking holdings:", updatedPortfolio[selectedAsset], "Selling:", lotSize);
-                        if (!updatedPortfolio[selectedAsset] || updatedPortfolio[selectedAsset] < lotSize) {
+                        if (!updatedPortfolio[selectedAsset] || updatedPortfolio[selectedAsset].length === 0) {
                             alert("Insufficient holdings!");
                             return;
                         }
-                        updatedBalance += cost;
-                        updatedPortfolio[selectedAsset] -= lotSize;
+
+                        let totalSold = 0;
+                        let remainingLotSize = lotSize;
+                        let totalCost = 0;
+
+                        // FIFO Logic - Sell from the front of the portfolio (first bought)
+                        while (remainingLotSize > 0 && updatedPortfolio[selectedAsset].length > 0) {
+                            const firstBuy = updatedPortfolio[selectedAsset][0]; // Get the first purchase lot
+                             // If the current lot size is smaller or equal to the remaining sell lot size, sell it all
+                             if (firstBuy.lotSize <= remainingLotSize) {
+                                totalSold += firstBuy.lotSize;
+                                totalCost += firstBuy.lotSize * firstBuy.price; // Add to total sale cost
+
+                                remainingLotSize -= firstBuy.lotSize; // Deduct the sold lot size
+                                updatedPortfolio[selectedAsset].shift(); // Remove the first buy lot (FIFO)
+                            } else {
+                                // If the current lot size is larger, partially sell it
+                                totalSold += remainingLotSize;
+                                totalCost += remainingLotSize * firstBuy.price;
+                                 // Update the first buy lot with the remaining lot size
+                                 updatedPortfolio[selectedAsset][0].lotSize -= remainingLotSize;
+                                 remainingLotSize = 0; // All lots are sold
+                                }
+                            }
+                            
+        // If everything is sold successfully, add the revenue to the balance
+
+
+        updatedBalance += totalCost;
+                        
+
+
+
+
+
                         console.log("Sell Order Executed: New Balance:", updatedBalance);
                     }
 

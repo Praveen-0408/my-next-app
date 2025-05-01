@@ -212,7 +212,10 @@ const TransactionHistory = () => {
             ) : (
                 <div style={styles.cardGrid}>
                     
-                            {transactions.map((tx, index) => {
+                    {[...transactions]
+    .sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0))
+    .map((tx, index) => {
+
                                  const assetSymbol = tx.asset.trim().toUpperCase(); // normalize asset name
                                  const priceData = commodityPrices[assetSymbol];
                                  const purchasePrice = tx.price;
@@ -226,7 +229,7 @@ const TransactionHistory = () => {
                                     tx.type === "Buy" ? priceData.Ask :
                                     tx.type === "Sell" ? priceData.Bid :
                                     null;
-                                    if (currentPrice) {
+                                    if (currentPrice !== null) {
                                         const plValue = ((currentPrice - purchasePrice) / purchasePrice) * 100;
                                         plPercent = plValue.toFixed(2) + "%";
 
@@ -246,47 +249,38 @@ const TransactionHistory = () => {
                                 }
                                  return (
                                   <div key={tx.id} style={styles.transactionBox}>
-                                    <div style={{ ...styles.rowContainer, display: "flex" }}>
-
+                                   <div style={styles.gridContainer}>
                                       
                                 
-                                    
-                                    <div style={styles.column}>
-                                      <div><strong>Type:</strong> {tx.type}</div>
-                                      <div><strong>Asset:</strong> {tx.asset}</div>
-                                      <div><strong>Lot Size:</strong> {tx.lotSize}</div>
-                                    
-                                    
+                                      <div><strong></strong> {tx.type}</div>
+                                  
+                                  
 
-                                    {/* ✅ Show Live Ask or Bid price */}
-                                    <div style={styles.column}>
-
-                                    <div><strong>Price:</strong> {tx.price.toFixed(2)}</div>
+                                    <div><strong></strong> {tx.price.toFixed(2)}</div>
                                     <div>
+                                    <strong></strong>{" "}
                                     <strong>
-                                    Live {tx.type === "Buy" ? "Ask" : "Bid"} Price:
-                                    </strong>{" "}
-                                    {currentPrice ? `₹${currentPrice.toFixed(2)}` : "Loading..."}
+                                    <span style={{ color: plPrice < 0 ? "red" : "green" }}>{plPrice !== "-" ? `${plPrice}` : "-"}</span>
+                                    </strong>
                                     </div>
-                                    <div><strong>Present Value:</strong> {presentValue}</div>
-
-
-                                    <div style={styles.column}>
+                                    <div><strong></strong> {tx.asset}</div>
+                                    
                                     <div>
-                                    <strong>P/L%:</strong>{" "}
-                                    <span style={{ color: plPercent.includes("-") ? "red" : "green" }}>{plPercent}</span>
+                                    <strong></strong>
+                                    {priceData ? `${priceData.Ask?.toFixed(2)} - ${priceData.Bid?.toFixed(2)}` : 'N/A'}
                                     </div>
                                     <div>
-                                    <strong>P/L Value:</strong>{" "}
-                                    <span style={{ color: plPrice < 0 ? "red" : "green" }}>{plPrice !== "-" ? `₹${plPrice}` : "-"}</span>
+                                    <div><strong></strong> {tx.timestamp ? new Date(tx.timestamp.seconds * 1000).toLocaleString() : "N/A"}</div>
+                                    
                                     </div>
                                     
-                                    <div><strong>Timestamp:</strong> {tx.timestamp ? new Date(tx.timestamp.seconds * 1000).toLocaleString() : "N/A"}</div>
+                                    <div><strong></strong> {tx.lotSize}</div>
+                                   
                                     </div>
                                     </div>
-                                    </div>
-                                    </div>
-                                    </div>
+                            
+                                
+                          
                                 
                             );
                         })}   
@@ -340,6 +334,15 @@ const styles = {
       flexDirection: "column",
       gap: "8px",
     },
+
+    gridContainer: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3, 1fr)",
+      gap: "12px",
+      fontSize: "14px",
+      color: "#333",
+    },
+    
   
     
       

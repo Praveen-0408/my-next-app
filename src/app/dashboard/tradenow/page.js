@@ -140,7 +140,6 @@ const styles = {
   },
   table: {
     width: '100%',
-    minWidth: '600px', // Ensure table can scroll horizontally if needed
     fontSize: '0.75rem',
     textAlign: 'left',
     color: '#374151',
@@ -185,6 +184,8 @@ price: {
   },
   // Responsive styles for mobile
   '@media (max-width: 768px)': {
+
+  
     title: {
       fontSize: '1.25rem', // Smaller title on mobile
     },
