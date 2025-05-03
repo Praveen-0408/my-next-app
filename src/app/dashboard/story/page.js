@@ -5,7 +5,8 @@ import { db } from "@/firebase/config";
 import { collection, query, where, orderBy, getDocs, doc, getDoc } from "firebase/firestore";
 import { auth } from "@/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-
+import { useRouter } from 'next/navigation'; // or 'next/router' for older versions
+import Link from "next/link";
 
 
 
@@ -27,14 +28,20 @@ const supportedAssets = [
     "SOYBEANS/USD",
   ];
 
+
+
 const TransactionHistory = () => {
     const [transactions, setTransactions] = useState([]);
     const [user, setUser] = useState(null);
     const [balance, setBalance] = useState(0);
     const [livePrices, setLivePrices] = useState({});
     const [commodityPrices, setCommodityPrices] = useState({});  // <-- Added state for commodity prices
+    const router = useRouter();
 
 
+    
+
+    
 
 
     const fetchCommodities = async () => {
@@ -248,7 +255,14 @@ const TransactionHistory = () => {
                                         }
                                 }
                                  return (
-                                  <div key={tx.id} style={styles.transactionBox}>
+                                  <Link
+                                  key={tx.id} 
+                                  
+                                  href={`/dashboard/tradeexecution?symbol=${tx.asset}&bid=${priceData?.Bid}&ask=${priceData?.Ask}&lotSize=${tx.lotSize}`}
+                                  passHref
+                              
+                                  >
+                                   <div style={styles.transactionBox}>
                                    <div style={styles.gridContainer}>
                                       
                                 
@@ -275,20 +289,25 @@ const TransactionHistory = () => {
                                     </div>
                                     
                                     <div><strong></strong> {tx.lotSize}</div>
+                                    </div>
                                    
                                     </div>
-                                    </div>
-                            
+                                    </Link>
                                 
+                                    
+                                    
+                                  );
+                                  
+                              })}
+                              </div>
+                            )}
+                            </div>
+                            ); 
+                          };       
                           
                                 
-                            );
-                        })}   
-                        </div>
-                        )}
-                         </div>
-                          );
-                        };         
+                            
+                               
                             
 
 // ✅ Define styles inside the same file

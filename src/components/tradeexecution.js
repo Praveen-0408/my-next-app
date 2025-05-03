@@ -27,12 +27,14 @@
         const symbolFromURL = searchParams.get("symbol");
         const bidFromURL = searchParams.get("bid");
         const askFromURL = searchParams.get("ask");
+    
+        
 
         console.log("🎯 Received commodityData:", commodityData);
         console.log("🎯 Is Array?", Array.isArray(commodityData));
 
         
-
+        
     
 
         useEffect(() => {
@@ -225,8 +227,10 @@
                             return;
                         }
                         updatedBalance -= cost;
-                        updatedPortfolio[selectedAsset] = updatedPortfolio[selectedAsset] || [];
-
+                        if (!Array.isArray(updatedPortfolio[selectedAsset])) {
+                            updatedPortfolio[selectedAsset] = [];
+                        }
+                        
                         // Add the buy details (lotSize and price) to the portfolio (FIFO - push to the end)
 
                         updatedPortfolio[selectedAsset].push({
@@ -414,6 +418,7 @@
 
                 </div>
             </div>
+            
         );
     };
 
