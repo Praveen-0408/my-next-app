@@ -258,7 +258,7 @@ const TransactionHistory = () => {
                                   <Link
                                   key={tx.id} 
                                   
-                                  href={`/dashboard/tradeexecution?symbol=${tx.asset}&bid=${priceData?.Bid}&ask=${priceData?.Ask}&lotSize=${tx.lotSize}`}
+                                  href={`/dashboard/tradeexecution?symbol=${tx.asset}&bid=${priceData?.Bid}&ask=${priceData?.Ask}&lotSize=${tx.lotSize}&price=${tx.price}&type=${tx.type}&pl=${plPrice}`}
                                   passHref
                               
                                   >

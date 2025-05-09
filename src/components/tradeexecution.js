@@ -1,8 +1,9 @@
 "use client";
     import { useState, useEffect, useCallback } from "react";
-    import { db, doc, getDoc, updateDoc, collection, addDoc, serverTimestamp} from "@/firebase/config";
+    import { db, doc, getDoc, updateDoc, collection, addDoc, getDocs, query, where, orderBy, serverTimestamp} from "@/firebase/config";
     import { useSearchParams, useRouter } from "next/navigation"; 
     import { auth } from "@/firebase/config"; // Firebase Authentication
+    import { onAuthStateChanged } from "firebase/auth";
 
 
     
@@ -27,6 +28,20 @@
         const symbolFromURL = searchParams.get("symbol");
         const bidFromURL = searchParams.get("bid");
         const askFromURL = searchParams.get("ask");
+        const lotSizeFromURL = searchParams.get("lotSize");
+        const priceFromURL = searchParams.get("price");
+        const plFromURL = searchParams.get("pl");
+        const type = searchParams.get("type");
+        
+        const parsedPL = parseFloat(plFromURL);
+        const isValidPL = !isNaN(parsedPL);
+        
+
+        
+          
+      
+      
+
     
         
 
@@ -41,8 +56,11 @@
             if (symbolFromURL) setSelectedAsset(symbolFromURL);
             if (bidFromURL) setBidPrice(parseFloat(bidFromURL));
             if (askFromURL) setAskPrice(parseFloat(askFromURL));
+            if (lotSizeFromURL) setLotSize(parseFloat(lotSizeFromURL));
+            
+
             console.log("📩 Symbol from URL:", symbolFromURL);
-        }, [symbolFromURL, bidFromURL, askFromURL]);
+        }, [symbolFromURL, bidFromURL, askFromURL, lotSizeFromURL ]);
 
         const normalize = (str) => str?.toLowerCase().trim();
         const formatPrice = (val) => Number(val).toFixed(2);
@@ -320,8 +338,20 @@
         
             
         // Handle lot size change
-        const adjustLotSize = (value) => {
-            setLotSize((prev) => Math.max(0, (prev + value).toFixed(1))); // Ensures non-negative values
+
+        useEffect(() => {
+    
+            if (lotSizeFromURL) {
+                const parsed = parseFloat(lotSizeFromURL);
+                if (!isNaN(parsed)) {
+                    setLotSize(parsed);
+                }
+            }
+        }, [lotSizeFromURL]);
+       
+        const adjustLotSize = (delta) => {
+            setLotSize((prev) => Math.max(0, +(prev + delta).toFixed(1)));
+        
         };
 
 
@@ -341,6 +371,9 @@
             return () => unsubscribe();
         }, [router]);
 
+
+
+
         // ✅ Fetch User Data (Balance & Portfolio) from Firestore
         useEffect(() => {
             if (!userId) return;
@@ -354,12 +387,7 @@
             fetchUserData();
         }, [userId]);
 
-        
-
-        
-
-        
-
+       
         return (
             <div style={styles.container}>
                 <h2 style={styles.heading}>Trade Execution</h2>
@@ -375,18 +403,24 @@
                     <option value="Stop Loss">Stop Loss Order</option>
                 </select>
 
-                <label style={styles.label}>Lot Size:</label>
+            
+                     
 
                 <div style={styles.lotSizeButtons}>
-                    {[-0.5, -0.1, 0.1, 0.5].map(value => (
-                    <button key={value} style={styles.lotButton} onClick={() => adjustLotSize(value)}>
-                        {value > 0 ? `+${value}` : value}
+                    {[-0.5, -0.1, 0.1, 0.5].map(delta => (
+                    <button key={delta} style={styles.lotButton} onClick={() => adjustLotSize(delta)}>
+                        {delta > 0 ? `+${delta}` : delta}
                     </button>
                     ))}
                 </div>
 
                 <label style={styles.label}>Lot Size:</label>
-                <input type="number" style={styles.input} value={lotSize} readOnly />
+                <input type="number" style={styles.input} value={lotSize} step="0.1"   min="0" onChange={(e) => updateLotSize(e.target.value)} onWheel={(e) => e.target.blur()}
+                 onKeyDown={(e) => {
+                    if (e.key === '-' || e.key === 'e') e.preventDefault();
+                }} 
+                
+                />
 
 
                 {/* Buy/Sell Section */}
@@ -417,11 +451,19 @@
                 </div>
 
                 </div>
-            </div>
-            
-        );
-    };
-
+                <h3>Profit/Loss </h3>
+                {/* ✅ Show only if type is "Buy" (previous) AND now selling */}
+                
+                     <div style={{ color: isValidPL && parsedPL < 0 ? 'red' : 'green', marginTop: '1rem' }}>
+                        <strong>
+                        {isValidPL ? parsedPL.toFixed(2) : '0.00'}
+                        </strong>
+                        </div>
+                        
+                
+                            </div>
+                            ); 
+                          };  
     
     // ✅ Styles Object
     const styles = {
